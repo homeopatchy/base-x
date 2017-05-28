@@ -11,11 +11,10 @@ var Buffer = require('safe-buffer').Buffer
 module.exports = function base (ALPHABET) {
   var ALPHABET_MAP = {}
   var BASE = ALPHABET.length
-  var LEADER = ALPHABET.charAt(0)
 
   // pre-compute lookup table
   for (var z = 0; z < ALPHABET.length; z++) {
-    var x = ALPHABET.charAt(z)
+    var x = ALPHABET[z]
 
     if (ALPHABET_MAP[x] !== undefined) throw new TypeError(x + ' is ambiguous')
     ALPHABET_MAP[x] = z
@@ -49,31 +48,48 @@ module.exports = function base (ALPHABET) {
   }
 
   function decodeUnsafe (string) {
-    if (string.length === 0) return Buffer.allocUnsafe(0)
+    var stringLen = string.length
+    if (stringLen === 0) return Buffer.allocUnsafe(0)
 
-    var bytes = [0]
-    for (var i = 0; i < string.length; i++) {
-      var value = ALPHABET_MAP[string[i]]
-      if (value === undefined) return
+    var paddingBytes = []
+    var dataBytes = []
+    var byteLen = 0
+    var isPadding = true
 
-      for (var j = 0, carry = value; j < bytes.length; ++j) {
-        carry += bytes[j] * BASE
-        bytes[j] = carry & 0xff
+    for (var i = 0; i < stringLen; i++) {
+      var c = string[i]
+      var value = ALPHABET_MAP[c]
+
+      var noValue = value === undefined
+      for (; noValue && i < stringLen;) {
+        c += string[++i]
+        value = ALPHABET_MAP[c]
+        noValue = value === undefined
+      }
+      if (noValue) return
+
+      if (isPadding) {
+        if (!value) {
+          paddingBytes.push(0)
+          continue
+        }
+        isPadding = false
+        byteLen = dataBytes.push(0)
+      }
+
+      for (var j = 0, carry = value; j < byteLen; ++j) {
+        carry += dataBytes[j] * BASE
+        dataBytes[j] = carry & 0xff
         carry >>= 8
       }
 
       while (carry > 0) {
-        bytes.push(carry & 0xff)
+        byteLen = dataBytes.push(carry & 0xff)
         carry >>= 8
       }
     }
 
-    // deal with leading zeros
-    for (var k = 0; string[k] === LEADER && k < string.length - 1; ++k) {
-      bytes.push(0)
-    }
-
-    return Buffer.from(bytes.reverse())
+    return Buffer.from(paddingBytes.concat(dataBytes.reverse()))
   }
 
   function decode (string) {

@@ -1,12 +1,13 @@
-# base-x
+# var-char-len-base-x
 
-[![NPM Package](https://img.shields.io/npm/v/base-x.svg?style=flat-square)](https://www.npmjs.org/package/base-x)
-[![Build Status](https://img.shields.io/travis/cryptocoinjs/base-x.svg?branch=master&style=flat-square)](https://travis-ci.org/cryptocoinjs/base-x)
+[![NPM Package](https://img.shields.io/npm/v/base-x.svg?style=flat-square)](https://www.npmjs.org/package/var-char-len-base-x)
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
 Fast base encoding / decoding of any given alphabet using bitcoin style leading
 zero compression.
+
+This is a fork of [cryptocoinjs/base-x](https://github.com/cryptocoinjs/base-x) but was modified to work with variable length character alphabets.
 
 ## Example
 
@@ -42,7 +43,7 @@ Base | Alphabet
 64 | `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/`
 66 | `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.!~`
 
-
+-
 ## How it works
 
 It encodes octet arrays by doing long divisions on all significant digits in the
