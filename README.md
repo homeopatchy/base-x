@@ -58,7 +58,7 @@ Base | Alphabet
 64 | `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/`
 66 | `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.!~`
 
--
+
 ## How it works
 
 It encodes octet arrays by doing long divisions on all significant digits in the
