@@ -7,7 +7,7 @@
 Fast base encoding / decoding of any given alphabet using bitcoin style leading
 zero compression.
 
-This is a fork of [cryptocoinjs/base-x](https://github.com/cryptocoinjs/base-x) but was modified to work with variable length character alphabets.
+This is a fork of [cryptocoinjs/base-x](https://github.com/cryptocoinjs/base-x) but was modified to work with variable length character alphabets and input arrays. It also supports defining a delimiter when encoding to handle ambiguous outputs.
 
 ## Example
 
@@ -15,7 +15,7 @@ Base58
 
 ``` javascript
 var BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
-var bs58 = require('base-x')(BASE58)
+var bs58 = require('var-char-len-base-x')(BASE58)
 
 var decoded = bs58.decode('5Kd3NBUAdUnhyzenEwVLy9pBKxSwXvE9FMPyR4UKZvpe6E3AgLr')
 
@@ -24,6 +24,21 @@ console.log(decoded)
 
 console.log(bs58.encode(decoded))
 // => 5Kd3NBUAdUnhyzenEwVLy9pBKxSwXvE9FMPyR4UKZvpe6E3AgLr
+```
+
+Array and delimiter support with variable character length
+
+``` javascript
+var BASEAB = ['a', 'ab']
+var bsab = require('var-char-len-base-x')(BASEAB)
+
+var decoded = bsab.decode('a.ab.ab.a'.split('.'))
+
+console.log(decoded)
+// => <Buffer 00 06>
+
+console.log(bsab.encode(decoded, '.'))
+// => 'a.ab.ab.a'
 ```
 
 ### Alphabets

@@ -20,7 +20,9 @@ module.exports = function base (ALPHABET) {
     ALPHABET_MAP[x] = z
   }
 
-  function encode (source) {
+  function encode (source, delimiter) {
+    if (delimiter === undefined) delimiter = ''
+    else delimiter = delimiter.toString()
     if (source.length === 0) return ''
 
     var digits = [0]
@@ -40,11 +42,11 @@ module.exports = function base (ALPHABET) {
     var string = ''
 
     // deal with leading zeros
-    for (var k = 0; source[k] === 0 && k < source.length - 1; ++k) string += ALPHABET[0]
+    for (var k = 0; source[k] === 0 && k < source.length - 1; ++k) string += delimiter + ALPHABET[0]
     // convert digits to a string
-    for (var q = digits.length - 1; q >= 0; --q) string += ALPHABET[digits[q]]
+    for (var q = digits.length - 1; q >= 0; --q) string += delimiter + ALPHABET[digits[q]]
 
-    return string
+    return delimiter ? string.substring(1) : string
   }
 
   function decodeUnsafe (string) {
